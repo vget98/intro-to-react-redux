@@ -1,18 +1,31 @@
 import React from 'react'
-import { render } from 'react-dom'
 import Landing from './landing'
 import Search from './Search'
 import Layout from './Layout'
-import { Router, Route, IndexRoute, hashHistory } from 'react-router'
+import Details from './Details'
+import { Router, Route, IndexRoute, browserHistory } from 'react-router'
+import { store } from './Store'
+import { Provider } from 'react-redux'
 
-const App = function () {
-  return (
-    <Router history={hashHistory}>
-      <Route path='/' component={Layout} />
-      <IndexRoute component={Landing} />
-      <Route path='/search' component={Search} />
-    </Router>
-  )
-}
+const myRoutes = () => (
+  <Route path='/' component={Layout} />
+    <IndexRoute component={Landing} />
+    <Route path='/search' component={Search} />
+    <Route path='/details/:id' component={Details} />
+)
 
-render(<App />, document.getElementById('app'))
+const App = React.createClass({
+  render () {
+    return (
+      <Provider store={store}>
+        <Router history={browserHistory}>
+          {myRoutes()}
+        </Router>
+      </Provider>
+    )
+  }
+})
+
+App.Routes = myRoutes
+
+module.exports = App
