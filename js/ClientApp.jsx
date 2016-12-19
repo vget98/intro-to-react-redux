@@ -1,17 +1,18 @@
-import React from 'react'
-import Landing from './landing'
-import Search from './Search'
-import Layout from './Layout'
-import Details from './Details'
-import { Router, Route, IndexRoute, browserHistory } from 'react-router'
-import { store } from './Store'
-import { Provider } from 'react-redux'
+const React = require('react')
+const Landing = require('./landing')
+const Search = require('./Search')
+const Layout = require('./Layout')
+const Details = require('./Details')
+const { Router, Route, IndexRoute, browserHistory } = require('react-router')
+const { store } = require('./Store')
+const { Provider } = require('react-redux')
 
 const myRoutes = () => (
-  <Route path='/' component={Layout} />
+  <Route path='/' component={Layout}>
     <IndexRoute component={Landing} />
     <Route path='/search' component={Search} />
     <Route path='/details/:id' component={Details} />
+  </Route>
 )
 
 const App = React.createClass({

@@ -1,6 +1,6 @@
-import React from 'react'
-import { Link, hashHistory } from 'react-router'
-import { connector } from './Store'
+const React = require('react')
+const { Link, hashHistory } = require('react-router')
+const { connector } = require('./Store')
 
 class Landing extends React.Component {
   constructor (props) {
