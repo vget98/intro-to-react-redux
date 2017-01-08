@@ -1,32 +1,56 @@
 const React = require('react')
-const Landing = require('./landing')
-const Search = require('./Search')
 const Layout = require('./Layout')
-const Details = require('./Details')
-const { Router, Route, IndexRoute, browserHistory } = require('react-router')
+const { Router, browserHistory } = require('react-router')
 const { store } = require('./Store')
 const { Provider } = require('react-redux')
+// how to real with async require
+if (typeof module !== 'undefined' && module.require) {
+  if (typeof require.ensure === 'undefined') {
+    require.ensure = require('node-ensure') // shim for node.js
+  }
+}
 
-const myRoutes = () => (
-  <Route path='/' component={Layout}>
-    <IndexRoute component={Landing} />
-    <Route path='/search' component={Search} />
-    <Route path='/details/:id' component={Details} />
-  </Route>
-)
+const rootRoute = {
+  component: Layout,
+  path: '/',
+  indexRoute: {
+    getComponent (location, cb) {
+      require.ensure([], (error) => {
+        cb(null, require('./Landing'))
+      })
+    }
+  },
+  childRoutes: [
+    {
+      path: 'search',
+      getComponent (location, cb) {
+        require.ensure([], (error) => {
+          cb(null, require('./Seach'))
+        })
+      }
+    },
+    {
+      path: 'details/:id',
+      getComponent (location, cb) {
+        require.ensure([], (error) => {
+          cb(null, require('./Details'))
+        })
+      }
+    }
+  ]
+}
 
 const App = React.createClass({
   render () {
     return (
       <Provider store={store}>
-        <Router history={browserHistory}>
-          {myRoutes()}
-        </Router>
+        <Router history={browserHistory} routes={rootRoute} />
       </Provider>
     )
   }
 })
 
-App.Routes = myRoutes
+App.Routes = rootRoute
+App.histoty = browserHistory
 
 module.exports = App
